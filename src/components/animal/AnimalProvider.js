@@ -7,12 +7,14 @@ export const AnimalContext = createContext()
 export const AnimalProvider = (props) => {
     const [animals, setAnimals] = useState([])
 
+    // Get existing animals from the DB
     const getAnimals = () => {
         return fetch("http://localhost:8088/animals")
         .then(res => res.json())
         .then(setAnimals)
     }
 
+    // Add a new animal to the DB
     const addAnimal = animalObj => {
         return fetch("http://localhost:8088/animals", {
             method: "POST",
