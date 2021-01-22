@@ -12,7 +12,7 @@ export const LocationList = () => {
     console.log("LocationList: useEffect - getLocations")
     getLocations()
 
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (

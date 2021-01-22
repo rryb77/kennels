@@ -12,7 +12,8 @@ export const EmployeeList = () => {
     console.log("EmployeeList: useEffect - getemployees")
     getEmployees()
 
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
 
 
   return (

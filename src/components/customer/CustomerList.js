@@ -12,7 +12,8 @@ export const CustomerList = () => {
     console.log("AnimalList: useEffect - getCustomers")
     getCustomers()
 
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
 
 
   return (

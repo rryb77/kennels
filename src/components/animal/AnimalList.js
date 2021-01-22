@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react"
+import { useHistory } from "react-router-dom"
 import { AnimalContext } from "./AnimalProvider"
 import { LocationContext } from "../location/LocationProvider"
 import { CustomerContext } from "../customer/CustomerProvider"
@@ -17,10 +18,20 @@ export const AnimalList = () => {
     getLocations()
     .then(getCustomers)
     .then(getAnimals)
-}, [])
+}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+
+  const history = useHistory()
 
 
   return (
+      
+    <>
+      <h2>Animals</h2>
+		  <button onClick={() => {history.push("/animals/create")}}>
+          Add Animal
+      </button> 
+
       <div className="animals">
           {animals.map(animal => {
             const owner = customers.find(c => c.id === animal.customerId)
@@ -30,7 +41,8 @@ export const AnimalList = () => {
                         location={clinic}
                         customer={owner}
                         animal={animal} />
-})}
+          })}
       </div>
-    )
+    </>
+  )
 }
