@@ -18,6 +18,7 @@ export const AnimalForm = () => {
 
     const [animal, setAnimal] = useState({
       name: "",
+      breed: "",
       locationId: 0,
       customerId: 0
     });
