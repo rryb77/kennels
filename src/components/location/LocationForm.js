@@ -5,7 +5,7 @@ import { LocationContext } from './LocationProvider'
 
 export const LocationForm = () => {
     
-    const { location, getLocations, addLocation } = useContext(LocationContext)
+    const { getLocations, addLocation } = useContext(LocationContext)
     /*
     With React, we do not target the DOM with `document.querySelector()`. Instead, our return (render) reacts to state or props.
 
@@ -35,9 +35,7 @@ export const LocationForm = () => {
       /* When changing a state object or array,
       always create a copy, make changes, and then set state.*/
       const newLocation = { ...locationAdd }
-      /* Animal is an object with properties.
-      Set the property to the new value
-      using object bracket notation. */
+      
       newLocation[event.target.id] = event.target.value
       // update state
       setLocation(newLocation)
