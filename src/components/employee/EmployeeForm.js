@@ -8,12 +8,6 @@ export const EmployeeForm = () => {
     const { addEmployee } = useContext(EmployeeContext)
     const { locations, getLocations } = useContext(LocationContext)
 
-    /*
-    With React, we do not target the DOM with `document.querySelector()`. Instead, our return (render) reacts to state or props.
-
-    Define the intial state of the form inputs with useState()
-    */
-
     const [employee, setEmployee] = useState({
       name: "",
       locationId: 0,
@@ -21,10 +15,6 @@ export const EmployeeForm = () => {
 
     const history = useHistory();
 
-    /*
-    Reach out to the world and get customers state
-    and locations state on initialization.
-    */
     useEffect(() => {
       getLocations()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -53,8 +43,6 @@ export const EmployeeForm = () => {
       if (locationId === 0) {
         window.alert("Please select a location")
       } else {
-        //invoke addAnimal passing animal as an argument.
-        //once complete, change the url and display the animal list
         employee.locationId = locationId
         addEmployee(employee)
         .then(() => history.push("/employees"))
