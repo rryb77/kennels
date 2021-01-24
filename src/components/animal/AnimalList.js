@@ -2,14 +2,19 @@ import React, { useContext, useEffect } from "react"
 import { AnimalContext } from "./AnimalProvider"
 import { AnimalCard } from "./AnimalCard"
 import "./Animal.css"
+import { useHistory } from "react-router-dom"
 
-export const AnimalList = ({ history }) => {
+
+// had to remove { history } from AnimalList = ({history}) to get the form rendering. Ask instructor about this.
+export const AnimalList = () => {
     const { getAnimals, animals } = useContext(AnimalContext)
 
     // Initialization effect hook -> Go get animal data
     useEffect(()=>{
         getAnimals()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const history = useHistory()
 
     return (
         <>
