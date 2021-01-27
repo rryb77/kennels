@@ -1,53 +1,36 @@
 import React, { useContext, useEffect } from "react"
-import { useHistory } from "react-router-dom"
 import { AnimalContext } from "./AnimalProvider"
-import { LocationContext } from "../location/LocationProvider"
-import { CustomerContext } from "../customer/CustomerProvider"
 import { AnimalCard } from "./AnimalCard"
 import "./Animal.css"
-
-export const AnimalList = () => {
-  // This state changes when `getAnimals()` is invoked below
-  const { animals, getAnimals } = useContext(AnimalContext)
-  const { locations, getLocations } = useContext(LocationContext)
-  const { customers, getCustomers } = useContext(CustomerContext)
-
-  //useEffect - reach out to the world for something
-  useEffect(() => {
-    console.log("AnimalList: Initial render before data")
-    getLocations()
-    .then(getCustomers)
-    .then(getAnimals)
-}, []) // eslint-disable-line react-hooks/exhaustive-deps
+import { useHistory } from "react-router-dom"
 
 
-  const history = useHistory()
+export const AnimalList = ({history}) => {
+    const { getAnimals, animals } = useContext(AnimalContext)
 
-  // Return the JSX formatted code to render to the DOM
-  return (
-      
-    <>
-      <h2>Animals</h2>
-		  {/* onClick is a built in listener that allows us to do "something" when clicked. In this case it's sending the user to the /animals/create view of the DOM */}
-      <button onClick={() => {history.push("/animals/create")}}>
-          Add Animal
-      </button> 
+    // Initialization effect hook -> Go get animal data
+    useEffect(()=>{
+        getAnimals()
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-      <div className="animals">
-          {/* map over the animals array so each animal entry in the DB will get rendered to the DOM */}
-          {animals.map(animal => {
-            // find the owner of the animal
-            const owner = customers.find(c => c.id === animal.customerId)
-            // find the clinic where the animal is located
-            const clinic = locations.find(l => l.id === animal.locationId)
+    history = useHistory()
 
-            // return the animal card for each animal found in the animals array, pass in the needed information with it via location={clinic}, etc..
-            return <AnimalCard key={animal.id}
-                        location={clinic}
-                        customer={owner}
-                        animal={animal} />
-          })}
-      </div>
-    </>
-  )
+    
+
+    return (
+        <>
+            <h1>Animals</h1>
+
+            <button onClick={() => history.push("/animals/create")}>
+                Make Reservation
+            </button>
+            <div className="animals">
+                {
+                    animals.map(animal => {
+                        return <AnimalCard key={animal.id} animal={animal} />
+                    })
+                }
+            </div>
+        </>
+    )
 }

@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react"
 import { LocationContext } from "../location/LocationProvider"
 import { EmployeeContext } from "./EmployeeProvider"
 import "./Employee.css"
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 export const EmployeeForm = () => {
-    const { addEmployee } = useContext(EmployeeContext)
+    const { addEmployee, getEmployeeById, updateEmployee } = useContext(EmployeeContext)
     const { locations, getLocations } = useContext(LocationContext)
 
     const [employee, setEmployee] = useState({
@@ -15,8 +15,21 @@ export const EmployeeForm = () => {
 
     const history = useHistory();
 
+    const [isLoading, setIsLoading] = useState(true)
+    const {employeeId} = useParams()
+
     useEffect(() => {
-      getLocations()
+      getLocations().then(() => {
+        if (employeeId) {
+          getEmployeeById(employeeId)
+          .then(employee => {
+            setEmployee(employee)
+            setIsLoading(false)
+          })
+        } else {
+          setIsLoading(false)
+        }
+      })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -35,18 +48,35 @@ export const EmployeeForm = () => {
       setEmployee(newEmployee)
     }
 
-    const handleClickSaveEmployee = (event) => {
-      event.preventDefault() //Prevents the browser from submitting the form
+    const handleClickSaveEmployee = () => {
 
       const locationId = parseInt(employee.locationId)
 
       if (locationId === 0) {
+
         window.alert("Please select a location")
+
       } else {
-        employee.locationId = locationId
-        addEmployee(employee)
-        .then(() => history.push("/employees"))
-      }
+          
+        setIsLoading(true)
+          employee.locationId = locationId
+
+          if (employeeId){
+            
+            updateEmployee({
+              id: employee.id,
+              name: employee.name,
+              locationId: locationId
+            })
+            .then(() => history.push(`/employees/detail/${employee.id}`))
+
+          } else {
+            
+            addEmployee(employee)
+            .then(() => history.push("/employees"))
+
+          }
+      } 
     }
 
     return (
@@ -61,7 +91,7 @@ export const EmployeeForm = () => {
           <fieldset>
               <div className="form-group">
                   <label htmlFor="location">Assign to location: </label>
-                  <select defaultValue={employee.locationId} name="locationId" id="locationId" className="form-control" onChange={handleControlledInputChange}>
+                  <select value={employee.locationId} name="locationId" id="locationId" className="form-control" onChange={handleControlledInputChange}>
                       <option value="0">Select a location</option>
                       {locations.map(l => (
                           <option key={l.id} value={l.id}>
@@ -72,9 +102,12 @@ export const EmployeeForm = () => {
               </div>
           </fieldset>
           <button className="btn btn-primary"
-            onClick={handleClickSaveEmployee}>
-            Save Employee
-          </button>
+          disabled={isLoading}
+          onClick={event => {
+            event.preventDefault() // Prevent browser from submitting the form and refreshing the page
+            handleClickSaveEmployee()
+          }}>
+        {employeeId ? "Save Employee" : "Add Employee"}</button>
       </form>
     )
 }
