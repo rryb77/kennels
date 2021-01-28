@@ -2,6 +2,8 @@ import React from "react"
 import { Link } from "react-router-dom"
 import "./NavBar.css"
 
+
+
 export const NavBar = (props) => {
     return (
         <ul className="navbar">
@@ -20,6 +22,13 @@ export const NavBar = (props) => {
             <li className="navbar__item">
                 <Link className="navbar__link" to="/employees">Employees</Link>
             </li>
+            <li className="navbar__item">
+                <Link className="navbar__link" onClick={taco} to="/login">Logout</Link>
+            </li>
         </ul>
     )
+}
+
+const taco = () => {
+    localStorage.clear()
 }
